@@ -9,7 +9,6 @@ from app.auth import token_auth
 @blog.route('/posts', methods=['GET'])
 def posts():
     posts = Post.query.all()
-    print("hello")
     return jsonify([p.to_dict() for p in posts])
 
 @blog.route('/posts/<int:id>', methods=['GET'])
