@@ -6,14 +6,17 @@ from app.models import User
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
 
+#  Thoughts
+    #  Rewatch video on using Postman. See if it's applicable to troubleshoot flask.
+    #  Resolve problems with signup. 
+    #  Add comments
+        #  Test if comments work in Postman
 
-@auth.route('/signup', methods=['GET', 'POST'])
+@auth.route('/signup', methods=['POST'])
 def signup():
     title = "Eat | Sign Up"
     form = UserInfoForm()
-    
     data = request.json
-
     username = form.username.data
     email = form.email.data
     password = form.password.data
@@ -28,8 +31,8 @@ def signup():
         db.session.add(p)
         db.session.commit()
         message = "You've successfully signed up. Welcome to EAT!"
-        # return jsonify({ 'message': message }), 201  # will this lead the user to a deadend page? 
-        return jsonify(p.to_dict())
+        return jsonify({ 'message': message }), 201  # will this lead the user to a deadend page? 
+        # return jsonify(p.to_dict())
 
 
     elif User.query.filter_by(username=username).first() == username:
