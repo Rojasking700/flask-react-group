@@ -17,8 +17,12 @@ def signup():
     username = form.username.data
     email = form.email.data
     password = form.password.data
+    print(request.method)
+    print(form.validate())
+    print(username, email, password)
     if request.method == 'POST' and form.validate():
-        p = User(data['username', data['email'], data['password']])
+        
+        p = User(data['username'], data['email'], data['password'])
         print(username, email, password)
         new_user = User(username, email, password)
         db.session.add(p)
@@ -28,32 +32,34 @@ def signup():
         return jsonify(p.to_dict())
 
 
-    elif User.query.filter_by(username=username).first():
+    elif User.query.filter_by(username=username).first() == username:
         message = "That username is taken. Please choose another."
         return jsonify({ 'message': message }), 409
-    elif User.query.filter_by(email=email).first():
+    elif User.query.filter_by(email=email).first() == email:
         message = "That email address is already connected to an account. Please use another."
         return jsonify({ 'message': message }), 409 
     else:
         return "fail"
         # 
     
-        
-        
-
-
-
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     title = "EAT | Log In"
     form = LoginForm()
+
+    print(request.method)
+    print(form.validate())
+    
     if request.method == 'POST' and form.validate():
         username = form.username.data
         password = form.password.data
+        # p = 
         user = User.query.filter_by(username=username).first()
-        if user is None or not check_password_hash(user.password, password):
-            message = "Email and/or password is not valid. Please try again."
-            return jsonify({ 'message': message }), 404
+    # elif user is None or not check_password_hash(user.password, password):
+    #     message = "Email and/or password is not valid. Please try again."     #doesnt work
+    #     return jsonify({ 'message': message }), 404
+    else:
+        return "fail"
 
 @auth.route('/logout')
 def logout():
