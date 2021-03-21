@@ -31,7 +31,7 @@ def signup():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     title = "EAT | Log In"
-    form = LoginForm()
+    # form = LoginForm()
 
     # print(request.method)
     # print(form.validate())
@@ -40,15 +40,16 @@ def login():
         data = request.json
         username = data['username']
         password = data['password']
-        
+
         user = User.query.filter_by(username=username).first()
 
         if user is None or not check_password_hash(user.password, password):
             message = "Email and/or password is not valid. Please try again."    
             return jsonify({ 'message': message }), 404
         # never calls login function
-
-        return jsonify("good") 
+        login_user(user)
+        print(current_user)
+        return jsonify(user.get_token())
         # return data??? on current user
 
     else:
