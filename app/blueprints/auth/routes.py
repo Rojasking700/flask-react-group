@@ -12,7 +12,7 @@ from werkzeug.security import check_password_hash
     #  Add comments
         #  Test if comments work in Postman
 
-@auth.route('/signup', methods=['POST'])
+@auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     title = "Eat | Sign Up"
     form = UserInfoForm()
@@ -20,30 +20,31 @@ def signup():
     username = form.username.data
     email = form.email.data
     password = form.password.data
-    print(request.method)
-    print(form.validate())
-    print(username, email, password)
-    if request.method == 'POST' and form.validate():
-        
+    # form.validate_username(username)
+    # form.validate_email(email)
+    # print(request.method)
+    # print(form.validate())
+    # print(username, email, password)
+    # checks if username is already taken
+    # if User.query.filter_by(username=username).first() == username:
+    #     message = "That username is taken. Please choose another."
+    #     return jsonify({ 'message': message }), 409
+    # checks if email is already taken
+    # elif User.query.filter_by(email=email).first() == email:
+    #     message = "That email address is already connected to an account. Please use another."
+    #     return jsonify({ 'message': message }), 409 
+    if request.method == 'POST' and form.validate(): 
         p = User(data['username'], data['email'], data['password'])
         print(username, email, password)
         new_user = User(username, email, password)
         db.session.add(p)
         db.session.commit()
         message = "You've successfully signed up. Welcome to EAT!"
-        return jsonify({ 'message': message }), 201  # will this lead the user to a deadend page? 
+        return redirect(url_for('index'))
+        # return jsonify({ 'message': message })  
         # return jsonify(p.to_dict())
-
-
-    elif User.query.filter_by(username=username).first() == username:
-        message = "That username is taken. Please choose another."
-        return jsonify({ 'message': message }), 409
-    elif User.query.filter_by(email=email).first() == email:
-        message = "That email address is already connected to an account. Please use another."
-        return jsonify({ 'message': message }), 409 
-    else:
-        return "fail"
-        # 
+    # else:
+    #     return "fail"
     
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
