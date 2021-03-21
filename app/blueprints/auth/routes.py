@@ -5,6 +5,7 @@ from .forms import UserInfoForm, LoginForm
 from app.models import User
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
+from app.tokens import get_token
 
 #  Thoughts
     #  Rewatch video on using Postman. See if it's applicable to troubleshoot flask.
@@ -16,17 +17,16 @@ from werkzeug.security import check_password_hash
 def signup():
     data = request.json
 
-    if request.method == 'POST' and data['password'] == data['confirm_password']:: 
+    if request.method == 'POST' and data['password'] == data['confirm_password']:
         token = None
         token_exp = None
         p = User(data['username'], data['email'], data['password'])
-        print(username, email, password)
+        # print(username, email, password)
         db.session.add(p)
         db.session.commit()
-        # message = "You've successfully signed up. Welcome to EAT!"
-        # return redirect(url_for('index'))
-        # return jsonify({ 'message': message })  
         return jsonify(p.to_dict())
+    else:
+        return "fail"
     
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
