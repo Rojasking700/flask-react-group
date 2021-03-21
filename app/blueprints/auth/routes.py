@@ -49,17 +49,21 @@ def login():
 
     print(request.method)
     print(form.validate())
-    
+
     if request.method == 'POST' and form.validate():
         username = form.username.data
         password = form.password.data
-        # p = 
+        
         user = User.query.filter_by(username=username).first()
-    # elif user is None or not check_password_hash(user.password, password):
-    #     message = "Email and/or password is not valid. Please try again."     #doesnt work
-    #     return jsonify({ 'message': message }), 404
+
+        if user is None or not check_password_hash(user.password, password):
+            message = "Email and/or password is not valid. Please try again."    
+            return jsonify({ 'message': message }), 404
+
+        return jsonify("good")
+
     else:
-        return "fail"
+        return jsonify("fail")
 
 @auth.route('/logout')
 def logout():
