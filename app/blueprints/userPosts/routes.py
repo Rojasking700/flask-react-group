@@ -1,4 +1,4 @@
-from . import bp as userPosts
+from . import bp as blog
 from flask import request, url_for, jsonify 
 from app import db
 from flask_login import login_required, current_user

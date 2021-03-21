@@ -1,3 +1,5 @@
 from flask import Blueprint
 
-bp  = Blueprint("userPosts", __name__, url_prefix="/userPosts")
+bp  = Blueprint("blog", __name__, url_prefix="/blog")
+
+from . import routes
