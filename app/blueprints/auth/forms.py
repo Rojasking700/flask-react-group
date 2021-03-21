@@ -8,7 +8,7 @@ class UserInfoForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    # confirm_pass = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    confirm_pass = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField()
 
     # def validate_username(self, username):

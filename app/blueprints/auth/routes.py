@@ -22,9 +22,9 @@ def signup():
     password = form.password.data
     # form.validate_username(username)
     # form.validate_email(email)
-    # print(request.method)
-    # print(form.validate())
-    # print(username, email, password)
+    print(request.method)
+    print(form.validate())
+    print(username, email, password)
     # checks if username is already taken
     # if User.query.filter_by(username=username).first() == username:
     #     message = "That username is taken. Please choose another."
@@ -41,10 +41,10 @@ def signup():
         db.session.commit()
         message = "You've successfully signed up. Welcome to EAT!"
         return redirect(url_for('index'))
-        # return jsonify({ 'message': message })  
+        return jsonify({ 'message': message })  
         # return jsonify(p.to_dict())
-    # else:
-    #     return "fail"
+    else:
+        return "fail"
     
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
