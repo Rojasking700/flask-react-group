@@ -102,7 +102,7 @@ class Comment(db.Model):
             "content": self.content,
             "date_created": self.date_created,
             "post_id": self.post_id,
-            "user": self.user_id
+            "user": User.query.get(self.user_id).username
         }
 
 # class Kekambas(db.Model):
