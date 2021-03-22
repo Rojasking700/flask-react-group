@@ -17,10 +17,10 @@ def post(id):
     return jsonify(p.to_dict())
 
 @blog.route('/createpost', methods=['POST'])
-@login_required
+@token_auth.login_required
 def createpost():
     data = request.json
-    user = current_user()
+    user = token_auth.current_user()
     p = Post(data['title'], data['content'], user.id)
     db.session.add(p)
     db.session.commit()
