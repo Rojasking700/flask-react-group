@@ -2,7 +2,7 @@ import os, base64
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 
 
 @login.user_loader
@@ -59,6 +59,7 @@ class Post(db.Model):
     title = db.Column(db.String(200))
     content = db.Column(db.String(300))
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    comments = db.relationship('Comment', backref='author', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __init__(self, title, content, user_id):
@@ -78,6 +79,29 @@ class Post(db.Model):
             "user": User.query.get(self.user_id).username
         }
 
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(300))
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, content, user_id):
+        self.content = content
+        self.user_id = user_id
+
+    def __repr__(self):
+        return f'<Comment: {self.content}>'
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "date_created": self.date_created,
+            "post_id": self.post_id,
+            "user": User.query.get(current_user).username
+        }
 
 # class Kekambas(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
