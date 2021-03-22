@@ -2,7 +2,7 @@ from . import bp as blog
 from flask import request, url_for, jsonify 
 from app import db
 from flask_login import login_required, current_user
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 from app.models import Post
 from app.auth import token_auth
 
@@ -11,10 +11,14 @@ def posts():
     posts = Post.query.all()
     return jsonify([p.to_dict() for p in posts])
 
-@blog.route('/posts/<int:id>', methods=['GET'])
+# Added comments here - JG
+@blog.route('/posts/<int:id>', methods=['GET', 'POST'])
+@login_required
 def post(id):
     p = Post.query.get_or_404(id)
-    return jsonify(p.to_dict())
+    comments = Comment.query.filter_by(p.id)
+    both = [p.to_dict(), [c.to_dict() for c in comments]]
+    return jsonify([i for i in both])
 
 @blog.route('/createpost', methods=['POST'])
 @token_auth.login_required
